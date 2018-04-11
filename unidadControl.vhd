@@ -23,26 +23,27 @@ begin
 	begin
 		if(op = "10")then
 			case op3 is
-				when "000000" ------> Add
+				when "000000" => ------> Add
 				aluop <= "000000";
-				when "000100" ------> Sub
+				when "000100" => ------> Sub
 				aluop <= "000001";
-				when "000001" ------> And
+				when "000001" => ------> And
 				aluop <= "000010";
-				when "000010" ------> Or
+				when "000010" => ------> Or
 				aluop <= "000011";
-				when "000101" ------> Andn
+				when "000101" => ------> Andn
 				aluop <= "000100";
-				when "000110" ------> Orn
+				when "000110" => ------> Orn
 				aluop <= "000101";
-				when "000011" ------> Xor
+				when "000011" => ------> Xor
+				aluop <= "000110";
+				when "000111" => ------> Xnor
 				aluop <= "000111";
-				when "000111" ------> Xnor
-				aluop <= "001000";
+				when others "000000";
 			end case;
 		end if;
 
-
+	end process;
 end Behavioral;
 
 
