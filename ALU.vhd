@@ -1,6 +1,8 @@
 -------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
 
 
 entity ALU is
@@ -34,11 +36,14 @@ begin
 			when "000101" =>
 				alu_out <= crs1 nor mux_out;
 				
-			when "000111" =>
+			when "000110" =>
 				alu_out <= crs1 xor mux_out;
 				
-			when "001000" =>
+			when "000111" =>
 				alu_out <= crs1 xnor mux_out;
+			
+			when others => 
+				alu_out <= "11111111111111111111111111111111";
 				
 		end case;
 		

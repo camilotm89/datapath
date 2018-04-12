@@ -39,7 +39,8 @@ begin
 				aluop <= "000110";
 				when "000111" => ------> Xnor
 				aluop <= "000111";
-				when others "000000";
+				when others =>
+				aluop <= "111111";
 			end case;
 		end if;
 
