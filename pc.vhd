@@ -12,18 +12,16 @@ end pc;
 architecture Behavioral of pc is
 
 begin
-	process(clk)
+	process(clk, rst)
 	begin
-		if (rst = '1')then
-			PCout <= "00000000000000000000000000000000";
-			
-		else
-			if (rising_edge(clk))then
+		if (rising_edge(clk)) then
+			if (rst = '0') then
 				PCout <= pcadder;
+			else
+				PCout <= "00000000000000000000000000000000";
 			end if;
 		end if;
 				
-
 end process;
 end Behavioral;
 

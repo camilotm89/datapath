@@ -20,7 +20,7 @@ architecture Behavioral of register_file is
 
 begin
 
-	process(RS1, RS2, RD, DWR, RST)
+	process(RS1, RS2, RD, DWR, RST, registers)
 	begin
 	
 	if( RST = '1')then
