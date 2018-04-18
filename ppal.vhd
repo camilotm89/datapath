@@ -28,7 +28,7 @@ architecture Behavioral of ppal is
 	component instructionMemory
 	port(
 			--clk : in std_logic;
-			address : in  STD_LOGIC_VECTOR (31 downto 0);
+			address : in  STD_LOGIC_VECTOR (5 downto 0);
 			rst : in  STD_LOGIC;
 			outInstruction : out  STD_LOGIC_VECTOR (31 downto 0)
 		  );
@@ -95,7 +95,7 @@ architecture Behavioral of ppal is
 begin
 
 	inst_adder: adder PORT MAP(
-		A => "00000000000000000000000000000100",
+		A => "00000000000000000000000000000001",
 		B => aux_pcout,
 		C => out_adder
 		);
@@ -117,7 +117,7 @@ begin
 	inst_im: instructionMemory PORT MAP(
 		--clk => clock,
 		rst => reset,
-		address => aux_pcout,
+		address => aux_pcout (5 downto 0),
 		outInstruction => im_out
 	);
 	
