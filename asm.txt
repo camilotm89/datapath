@@ -1,7 +1,8 @@
-mov  8, %g1
-mov  -7, %g2
-add  %g1, %g2, %o0
-xor  %g1, %g2, %g1
-andn  %g1, %g2, %o2
+mov  3, %g1
+mov  5, %g2
+add  %g1, 1, %o0
+sub  %g2, %g1, %o1
+xor  %g1, %g2, %o2
 xnor  %g1, %g2, %o3
-sub  %g1, %g2, %o4
+and  %g1, %g2, %o4
+andn  %g1, %g2, %o5
