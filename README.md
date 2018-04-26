@@ -1,4 +1,4 @@
-Datapath elaborado por:
+Procesador elaborado por:
   - Cristian Camilo Holguín G.
   - Kevin Alexander Moreno
   - Camilo Trejos
