@@ -1,14 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity PSR_Modifier is
     Port ( aluop : in  STD_LOGIC_VECTOR (5 downto 0);
@@ -23,7 +15,16 @@ architecture Behavioral of PSR_Modifier is
 begin
 		process(aluop, out_ppal, crs1, crs2)
 			begin
-				if 
+				if (aluop = "010000" or aluop = "011000")then -- Addcc y AddXcc
+					nzvc(0) <= (crs1 and crs2) or (not(out_ppal(31)) and (crs1 or crs2));
+			
+			else
+				if (aluop = "010100" or aluop = "011100")then -- Subcc y SubXcc
+					nzvc(0) <= (((not crs1) and crs2) or (out_ppal(31) and ((not crs1) or crs2)));
+				end if;
+				
+				end if;
+		end process;
 
 end Behavioral;
 
