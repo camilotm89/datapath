@@ -45,6 +45,31 @@ else
 	end if;	
 end if;
 
+
+if (rs2>="11000" and rs2<= "11111")then 
+	nrs2<= rs2-(conv_integer(cwp)*16);
+else 
+	if (rs2>="10000" and rs2<= "10111")then
+		nrs2<= rs2+(conv_integer(cwp)*16);
+	else 
+		if (rs2>="01000" and rs2<= "01111")then
+			nrs2<= rs2+(conv_integer(cwp)*16);
+		end if;
+	end if;	
+end if;
+
+if (rd>="11000" and rd<= "11111")then 
+	nrd<= rd-(conv_integer(cwp)*16);
+else 
+	if (rd>="10000" and rd<= "10111")then
+		nrd<= rd+(conv_integer(cwp)*16);
+	else 
+		if (rd>="01000" and rd<= "01111")then
+			nrd<= rd+(conv_integer(cwp)*16);
+		end if;
+	end if;	
+end if;
+
 end process;
 
 end Behavioral;
