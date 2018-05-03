@@ -17,6 +17,7 @@ entity windowsmanager is
 end windowsmanager;
 
 architecture Behavioral of windowsmanager is
+	signal rs1Integer,rs2Integer,rdInteger: integer range 0 to 39:=0;
 
 begin
 process(op, op3,cwp,rs1,rs2,rd)
