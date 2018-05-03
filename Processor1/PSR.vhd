@@ -5,8 +5,8 @@ entity PSR is
     Port ( clock : in STD_LOGIC;
 			  reset : in STD_LOGIC;
 			  nzvc : in  STD_LOGIC_VECTOR (3 downto 0);
-			  nCWP : in STD_LOGIC_VECTOR (4 downto 0);
-			  CWP : out STD_LOGIC_VECTOR (4 downto 0);
+			  nCWP : in STD_LOGIC_VECTOR (1 downto 0);
+			  CWP : out STD_LOGIC_VECTOR (1 downto 0);
 			  c : out  STD_LOGIC);
 end PSR;
 
@@ -19,16 +19,15 @@ begin
 		begin
 		if (rising_edge(clock))then
 			if (reset = '1')then
-				CWP <= "00000";
+				CWP <= "00";
 				c <= '0';
 			else
 				Registro(23 downto 20) <= nzvc;
-				Registro(4 downto 0) <= nCWP;
+				Registro(1 downto 0) <= nCWP;
 				c <= Registro(20);
-				nCWP <= Registro(4 downto 0);
+				CWP <= Registro(1 downto 0);
 			end if;
 		end if;
 		end process;
 
 end Behavioral;
-
