@@ -1,6 +1,7 @@
--------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
 
 
 entity windowsmanager is
@@ -23,12 +24,27 @@ begin
 process(op, op3,cwp,rs1,rs2,rd)
 begin
 
-if(op = "10" and op3 = "111100")then--
+if(op = "10" and op3 = "111100")then--save -- revisar and o &
+	ncwp <= (cwp-"01");
 
-else if(op = "10" and op3 = "111101")then--
+else 
+	if(op = "10" and op3 = "111101")then-- restore
+		ncwp<= cwp+"01";
+	end if;
+end if;
+
+if (rs1>="11000" and rs1<= "11111")then 
+	nrs1<= rs1-(conv_integer(cwp)*16);
+else 
+	if (rs1>="10000" and rs1<= "10111")then
+		nrs1<= rs1+(conv_integer(cwp)*16);
+	else 
+		if (rs1>="01000" and rs1<= "01111")then
+			nrs1<= rs1+(conv_integer(cwp)*16);
+		end if;
+	end if;	
+end if;
 
 end process;
 
-
 end Behavioral;
-
