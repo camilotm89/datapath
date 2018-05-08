@@ -16,15 +16,15 @@ begin
 		process(aluop, out_ppal, crs1, crs2)
 			begin
 				if (out_ppal(31) = '1') then --N
-						nzvc(3) = '1';
+						nzvc(3) <= '1';
 						else
-						nzvc(3) = '0';
+						nzvc(3) <= '0';
 				end if;
 					
 				if (out_ppal = "00000000000000000000000000000000") then --Z
-						nzvc(2) = '1';
+						nzvc(2) <= '1';
 						else
-						nzvc(2) = '0';
+						nzvc(2) <= '0';
 				end if;
 					
 				if (aluop = "010000" or aluop = "011000")then -- Addcc y AddXcc
