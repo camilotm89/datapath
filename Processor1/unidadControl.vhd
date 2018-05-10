@@ -63,3 +63,6 @@ begin
 					aluop <= "111111";
 			end case;
 		end if;
+			
+	end process;
+end Behavorial;
