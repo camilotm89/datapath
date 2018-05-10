@@ -16,53 +16,50 @@ begin
 		if(op = "10")then
 			case op3 is
 				when "000000" => ------> Add
-				aluop <= "000000";
+					aluop <= "000000";
 				when "000100" => ------> Sub
-				aluop <= "000001";
+					aluop <= "000001";
 				when "000001" => ------> And
-				aluop <= "000010";
+					aluop <= "000010";
 				when "000010" => ------> Or
-				aluop <= "000011";
+					aluop <= "000011";
 				when "000101" => ------> Andn
-				aluop <= "000100";
+					aluop <= "000100";
 				when "000110" => ------> Orn
-				aluop <= "000101";
+					aluop <= "000101";
 				when "000011" => ------> Xor
-				aluop <= "000110";
+					aluop <= "000110";
 				when "000111" => ------> Xnor
-				aluop <= "000111";
+					aluop <= "000111";
 				when "010000" => ------> Addcc
-				aluop <= "001000";
-				--when "001000" => ------> AddX
-				--aluop <= "001001";
+					aluop <= "001000";
+				when "001000" => ------> AddX
+					aluop <= "001001";
 				when "011000" => ------> AddXcc
-				aluop <= "001010";
+					aluop <= "001010";
 				when "010100" => ------> Subcc
-				aluop <= "001011";
-				--when "001100" => ------> SubX
-				--aluop <= "001100";
+					aluop <= "001011";
+				when "001100" => ------> SubX
+					aluop <= "001100";
 				when "011100" => ------> SubXcc
-				aluop <= "001101";
+					aluop <= "001101";
 				when "010001" => ------> Andcc
-				aluop <= "001110";
+					aluop <= "001110";
 				when "010101" => ------> Andncc
-				aluop <= "001111";
+					aluop <= "001111";
 				when "010010" => ------> Orcc
-				aluop "010000";
+					aluop <= "010000";
 				when "010110" => ------> Orncc
-				aluop "010001";
+					aluop <= "010001";
 				when "010011" => ------> Xorcc
-				aluop "010010";
+					aluop <= "010010";
 				when "010111" => ------> Xnorcc
-				aluop "010011";
+					aluop <= "010011";
 				when "111100" => ------> Save
-				aluop <= "000000"; -- Modifica CWP
+					aluop <= "000000"; -- Modifica CWP
 				when "111101" => ------> Restore
-				aluop <= "000000"; -- Modifica CWP
+					aluop <= "000000"; -- Modifica CWP
 				when others =>
-				aluop <= "111111";
+					aluop <= "111111";
 			end case;
 		end if;
-
-	end process;
-end Behavioral;
