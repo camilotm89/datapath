@@ -1,3 +1,4 @@
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
@@ -34,38 +35,38 @@ else
 end if;
 
 if (rs1>="11000" and rs1<= "11111")then 
-	nrs1<= rs1-(conv_integer(cwp)*16);
+	nrs1<= '0'&rs1-(conv_integer(cwp)*16);
 else 
-	if (rs1>="10000" and rs1<= "10111")then
-		nrs1<= rs1+(conv_integer(cwp)*16);
+	if (rs1>="10000" and rs1<= "10111")then 
+		nrs1<= '0'&rs1+(conv_integer(cwp)*16);
 	else 
 		if (rs1>="01000" and rs1<= "01111")then
-			nrs1<= rs1+(conv_integer(cwp)*16);
+			nrs1<= '0'&rs1+(conv_integer(cwp)*16);
 		end if;
 	end if;	
 end if;
 
 
 if (rs2>="11000" and rs2<= "11111")then 
-	nrs2<= rs2-(conv_integer(cwp)*16);
+	nrs2<= '0'&rs2-(conv_integer(cwp)*16);
 else 
 	if (rs2>="10000" and rs2<= "10111")then
-		nrs2<= rs2+(conv_integer(cwp)*16);
+		nrs2<= '0'&rs2+(conv_integer(cwp)*16);
 	else 
 		if (rs2>="01000" and rs2<= "01111")then
-			nrs2<= rs2+(conv_integer(cwp)*16);
+			nrs2<= '0'&rs2+(conv_integer(cwp)*16);
 		end if;
 	end if;	
 end if;
 
 if (rd>="11000" and rd<= "11111")then 
-	nrd<= rd-(conv_integer(cwp)*16);
+	nrd<= '0'&rd-(conv_integer(cwp)*16);
 else 
 	if (rd>="10000" and rd<= "10111")then
-		nrd<= rd+(conv_integer(cwp)*16);
+		nrd<= '0'&rd+(conv_integer(cwp)*16);
 	else 
 		if (rd>="01000" and rd<= "01111")then
-			nrd<= rd+(conv_integer(cwp)*16);
+			nrd<= '0'&rd+(conv_integer(cwp)*16);
 		end if;
 	end if;	
 end if;

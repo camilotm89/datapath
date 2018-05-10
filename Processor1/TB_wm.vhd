@@ -1,4 +1,3 @@
----------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
  
@@ -66,27 +65,60 @@ BEGIN
    begin		
       
 		cwp <="00";
-      wait for 100 ns;
-		rs1 <="00000";
-		rs2 <="00101";
-		rd <="00111";
+      wait for 50 ns;
+		rs1 <="10000";--L0
+		rs2 <="10001";--L1
+		rd <= "10010";--L2
+		op <="10";
+		op3 <="000000";
+		
+		wait for 50 ns;
+		cwp <=nCwp;
+		
+		wait for 50 ns;
+		rs1 <="01000";
+		rs2 <="11101";
+		rd <= "01001";
+		op <="10";
+		op3 <="000000";
+		
+		cwp <=nCwp;
+		
+      wait for 50 ns; ---- RESTORE
+		rs1 <="10000";--L0
+		rs2 <="10001";--L1
+		rd <= "10010";--L2
 		op <="10";
 		op3 <="111101";
 		
-		wait for 10 ns;
-		cwp <=nCwp;
-		
-		wait for 10 ns;
+	
+		wait for 50 ns;
 		rs1 <="01000";
 		rs2 <="11101";
-		rd <="00011";
+		rd <= "01001";
 		op <="10";
 		op3 <="000000";
-		wait for 10 ns;
+		
 		cwp <=nCwp;
 		
+		 wait for 50 ns; ---- LOAD
+		rs1 <="10000";--L0
+		rs2 <="10001";--L1
+		rd <= "10010";--L2
+		op <="10";
+		op3 <="111100";
 		
-      
+		
+		cwp <=nCwp;
+		
+		wait for 50 ns;
+		rs1 <="01000";
+		rs2 <="11101";
+		rd <= "01001";
+		op <="10";
+		op3 <="000000";
+		
+		cwp <=nCwp;
+		      
    end process;
-
 END;
