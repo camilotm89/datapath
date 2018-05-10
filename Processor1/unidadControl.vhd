@@ -65,4 +65,4 @@ begin
 		end if;
 			
 	end process;
-end Behavorial;
+end Behavioral;
