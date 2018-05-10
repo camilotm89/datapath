@@ -63,7 +63,20 @@ begin
 			when "001110" => ------> Andcc
 				alu_out <= crs1 and mux_out;
 			
+			when "001111" => ------> andncc
+				alu_out <= crs1 nand mux_out;
 			
+			when "010000" => ------> Orcc
+				alu_out <= crs1 or mux_out;
+				
+			when "010001" => ------> Orncc
+				alu_out <= crs1 nor mux_out;
+			
+			when "010010" => ------> Xorcc
+				alu_out <= crs1 xor mux_out;
+				
+			when "010011" => ------> Xnorcc
+				alu_out <= crs1 xnor mux_out;
 			
 			when others => 
 				alu_out <= "11111111111111111111111111111111";
