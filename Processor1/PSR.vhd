@@ -16,7 +16,7 @@ signal s_cwp: STD_LOGIC_VECTOR (1 downto 0):= (others=>'0');
 signal s_carry: STD_LOGIC :='0';
 
 begin
-	process(clock, reset, nzvc, nCWP)
+	process(clock, reset, nzvc)
 		begin
 			if (reset = '1')then
 				s_cwp<= "00";

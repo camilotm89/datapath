@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_arith.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 
@@ -20,20 +21,21 @@ architecture Behavioral of register_file is
 
 begin
 
-	process(nRS1, nRS2, nRD, DWR, RST, registers)
+	process(nRS1, nRS2, nRD, DWR, RST)
 	begin
 	
 	if( RST = '1')then
+		registers <= (others => x"00000000");
 		CRS1 <= (others=> '0');
 		CRS2 <= (others => '0');
-		registers <= (others => x"00000000");
 		
 	else
-		CRS1 <= registers(conv_integer(nRS1));
-		CRS2 <= registers(conv_integer(nRS2));
 		if (nRD /= "000000") then
 			registers(conv_integer(nRD))<= DWR;
-		end if;		
+		end if;
+		CRS1 <= registers(conv_integer(nRS1));
+		CRS2 <= registers(conv_integer(nRS2));
+				
 
 	end if;
 	end process;

@@ -8,7 +8,7 @@ USE ieee.std_logic_1164.ALL;
 ENTITY TB_Procesador IS
 END TB_Procesador;
  
-ARCHITECTURE behavior OF TB_Procesador IS 
+	ARCHITECTURE behavior OF TB_Procesador IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  

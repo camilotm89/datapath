@@ -140,7 +140,7 @@ begin
 
 	inst_adder: adder PORT MAP(
 		A => "00000000000000000000000000000001",
-		B => aux_pcout,
+		B => aux_npcout,
 		C => out_adder
 		);
 		
@@ -178,16 +178,6 @@ begin
       nrd => aux_nrd
 		);
 		
-	inst_rf: register_file PORT MAP(
-		nRS1 => aux_nrs1,
-		nRS2 => aux_nrs2,
-		nRD => aux_nrd,
-		DWR => aux_aluout,
-		RST => reset,
-		CRS1 => aux_crs1,
-		CRS2 => aux_crs2
-		);	
-		
 	inst_uc: unidadControl PORT MAP(
 		op => im_out(31 downto 30),
 		op3 => im_out(24 downto 19),
@@ -213,6 +203,16 @@ begin
 		alu_op => aux_aluop,
 		alu_out => aux_aluout
 		);
+		
+	inst_rf: register_file PORT MAP(
+		nRS1 => aux_nrs1,
+		nRS2 => aux_nrs2,
+		nRD => aux_nrd,
+		DWR => aux_aluout,
+		RST => reset,
+		CRS1 => aux_crs1,
+		CRS2 => aux_crs2
+		);	
 		
 	inst_psrm: PSR_Modifier PORT MAP(
 	   aluop => aux_aluop,

@@ -1,6 +1,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use ieee.std_logic_arith.all;
+use IEEE.NUMERIC_STD.ALL;
+use IEEE.STD_LOGIC_SIGNED.ALL;
 
 
 
@@ -14,75 +16,79 @@ end ALU;
 
 architecture Behavioral of ALU is
 
+signal alu_r : std_logic_vector (31 downto 0):=(others=>'0');
+
 begin
-	process(crs1, mux_out, alu_op, c)
+	process(crs1, mux_out, alu_op)
 	begin
 		case (alu_op) is
 			when "000000" => ------> Add
-				alu_out <= crs1 + mux_out;
+				alu_r <= crs1 + mux_out;
 				
 			when "000001" => ------> Sub
-				alu_out <= crs1 - mux_out;
+				alu_r <= crs1 - mux_out;
 				
 			when "000010" => ------> And
-				alu_out <= crs1 and mux_out;
+				alu_r <= crs1 and mux_out;
 				
 			when "000011" => ------> Or
-				alu_out <= crs1 or mux_out;
+				alu_r <= crs1 or mux_out;
 			
 			when "000100" => ------> Nand
-				alu_out <= crs1 nand mux_out;
+				alu_r <= crs1 and not mux_out;
 				
 			when "000101" => ------> Nor
-				alu_out <= crs1 nor mux_out;
+				alu_r <= crs1 or not mux_out;
 				
 			when "000110" => ------> Xor
-				alu_out <= crs1 xor mux_out;
+				alu_r <= crs1 xor mux_out;
 				
 			when "000111" => ------> Xnor
-				alu_out <= crs1 xnor mux_out;
+				alu_r <= crs1 xor not mux_out;
 			
 			when "001000" => ------> Addcc
-				alu_out <= crs1 + mux_out;
+				alu_r <= crs1 + mux_out;
 			
 			when "001001" => ------> AddX
-				alu_out <= crs1 + mux_out + c;
+				alu_r <= crs1 + mux_out + c;
 			
 			when "001010" => ------> AddXcc
-				alu_out <= crs1 + mux_out + c;
+				alu_r <= crs1 + mux_out + c;
 				
 			when "001011" => ------> Subcc
-				alu_out <= crs1 - mux_out;
+				alu_r <= crs1 - mux_out;
 			
 			when "001100" => ------> SubX
-				alu_out <= crs1 - mux_out + c;
+				alu_r <= crs1 - mux_out + c;
 			
 			when "001101" => ------> SubXcc
-				alu_out <= crs1 - mux_out + c;
+				alu_r <= crs1 - mux_out + c;
 			
 			when "001110" => ------> Andcc
-				alu_out <= crs1 and mux_out;
+				alu_r <= crs1 and mux_out;
 			
 			when "001111" => ------> andncc
-				alu_out <= crs1 nand mux_out;
+				alu_r <= crs1 and not mux_out;
 			
 			when "010000" => ------> Orcc
-				alu_out <= crs1 or mux_out;
+				alu_r <= crs1 or mux_out;
 				
 			when "010001" => ------> Orncc
-				alu_out <= crs1 nor mux_out;
+				alu_r <= crs1 or not mux_out;
 			
 			when "010010" => ------> Xorcc
-				alu_out <= crs1 xor mux_out;
+				alu_r <= crs1 xor mux_out;
 				
 			when "010011" => ------> Xnorcc
-				alu_out <= crs1 xnor mux_out;
+				alu_r <= crs1 xor not mux_out;
 			
 			when others => 
-				alu_out <= "00011111111111111111111111111111";
+				alu_r <= "11111111111111111111111111111111";
 				
 		end case;
 		
 	end process;
+	
+alu_out <= alu_r;
 		
 end Behavioral;
