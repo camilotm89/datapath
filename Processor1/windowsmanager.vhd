@@ -19,12 +19,14 @@ end windowsmanager;
 
 architecture Behavioral of windowsmanager is
 	signal rs1Integer,rs2Integer,rdInteger: integer range 0 to 39:=0;
+	signal nrs1_s : STD_LOGIC_VECTOR(5 downto 0):=(others=>'0');
+	signal nrs2_s : STD_LOGIC_VECTOR(5 downto 0):=(others=>'0');
 
 begin
 process(op, op3,cwp,rs1,rs2,rd)
 begin
 
-if(op = "10" and op3 = "111100")then--save -- revisar and o &
+if(op = "10" and op3 = "111100")then--save 
 	ncwp <= (cwp-"01");
 
 else 
@@ -34,26 +36,26 @@ else
 end if;
 
 if (rs1>="11000" and rs1<= "11111")then 
-	nrs1<= '0'&rs1-(conv_integer(cwp)*16);
+	nrs1_s<= '0'&rs1-(conv_integer(cwp)*16);
 else 
 	if (rs1>="10000" and rs1<= "10111")then 
-		nrs1<= '0'&rs1+(conv_integer(cwp)*16);
+		nrs1_s<= '0'&rs1+(conv_integer(cwp)*16);
 	else 
 		if (rs1>="01000" and rs1<= "01111")then
-			nrs1<= '0'&rs1+(conv_integer(cwp)*16);
+			nrs1_s<= '0'&rs1+(conv_integer(cwp)*16);
 		end if;
 	end if;	
 end if;
 
 
 if (rs2>="11000" and rs2<= "11111")then 
-	nrs2<= '0'&rs2-(conv_integer(cwp)*16);
+	nrs2_s<= '0'&rs2-(conv_integer(cwp)*16);
 else 
 	if (rs2>="10000" and rs2<= "10111")then
-		nrs2<= '0'&rs2+(conv_integer(cwp)*16);
+		nrs2_s<= '0'&rs2+(conv_integer(cwp)*16);
 	else 
 		if (rs2>="01000" and rs2<= "01111")then
-			nrs2<= '0'&rs2+(conv_integer(cwp)*16);
+			nrs2_s<= '0'&rs2+(conv_integer(cwp)*16);
 		end if;
 	end if;	
 end if;
@@ -71,6 +73,9 @@ else
 end if;
 
 end process;
+
+nrs1 <= nrs1_s;
+nrs2 <= nrs2_s;
 
 end Behavioral;
 

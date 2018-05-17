@@ -4,7 +4,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity unidadControl is
     Port ( op : in  STD_LOGIC_VECTOR (1 downto 0);
            op3 : in  STD_LOGIC_VECTOR (5 downto 0);
-			  nzvc : in STD_LOGIC_VECTOR (3 downto 0);
+			  --nzvc : in STD_LOGIC_VECTOR (3 downto 0);
            aluop : out  STD_LOGIC_VECTOR (5 downto 0));
 end unidadControl;
 

@@ -15,7 +15,7 @@ end ALU;
 architecture Behavioral of ALU is
 
 begin
-	process(crs1, mux_out, alu_op)
+	process(crs1, mux_out, alu_op, c)
 	begin
 		case (alu_op) is
 			when "000000" => ------> Add
@@ -79,7 +79,7 @@ begin
 				alu_out <= crs1 xnor mux_out;
 			
 			when others => 
-				alu_out <= "11111111111111111111111111111111";
+				alu_out <= "00011111111111111111111111111111";
 				
 		end case;
 		

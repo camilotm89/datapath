@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity ppal is
     port ( reset : in  STD_LOGIC;
@@ -47,7 +48,7 @@ architecture Behavioral of ppal is
 			  rs1 : in  STD_LOGIC_VECTOR (4 downto 0);
            rs2 : in  STD_LOGIC_VECTOR (4 downto 0);
            rd : in  STD_LOGIC_VECTOR (4 downto 0);
-			  ncwp : out STD_LOGIC_VECTOR (1 downto 0):="00";
+			  ncwp : out STD_LOGIC_VECTOR (1 downto 0);
            nrs1 : out  STD_LOGIC_VECTOR (5 downto 0);
            nrs2 : out  STD_LOGIC_VECTOR (5 downto 0);
            nrd : out  STD_LOGIC_VECTOR (5 downto 0)
@@ -73,10 +74,10 @@ architecture Behavioral of ppal is
 	end component;
 
 	component PSR_Modifier
-	port ( aluop : in  STD_LOGIC_VECTOR (5 downto 0);
+	port (  aluop : in  STD_LOGIC_VECTOR (5 downto 0);
            out_ppal : in  STD_LOGIC_VECTOR (31 downto 0);
-           crs1 : in  STD_LOGIC_VECTOR (31 downto 0);
-           crs2 : in  STD_LOGIC_VECTOR (31 downto 0);
+           crs1 : in  STD_LOGIC;
+           crs2 : in  STD_LOGIC;
            nzvc : out  STD_LOGIC_VECTOR (3 downto 0)
 			);
 	end component;
@@ -108,12 +109,11 @@ architecture Behavioral of ppal is
 			);
 	end component;
 	
-	-- datapath signals
-	signal out_adder: std_logic_vector(31 downto 0):=(others=>'0');
+signal out_adder: std_logic_vector(31 downto 0):=(others=>'0');
 	signal aux_npcout: std_logic_vector(31 downto 0):=(others=>'0');
 	signal aux_pcout: std_logic_vector(31 downto 0):=(others=>'0');
 	-- im signals
-	signal im_out: STD_LOGIC_VECTOR(31 downto 0):=(others=>'0');
+	signal im_out: std_logic_vector(31 downto 0):=(others=>'0');
 	-- seu signals
 	signal aux_seuout: std_logic_vector(31 downto 0):=(others=>'0');
 	-- rf signals
@@ -121,19 +121,20 @@ architecture Behavioral of ppal is
 	signal aux_crs2: std_logic_vector(31 downto 0):=(others=>'0');
 	-- uc signals
 	signal aux_aluop: std_logic_vector(5 downto 0):=(others=>'0');
+	-- windows manager signals
+	signal aux_ncwp: std_logic_vector(1 downto 0):=(others=>'0');
+	signal aux_nrs1: std_logic_vector(5 downto 0):=(others=>'0');
+	signal aux_nrs2: std_logic_vector(5 downto 0):=(others=>'0');
+	signal aux_nrd: std_logic_vector(5 downto 0):=(others=>'0');
+	-- PSR signals
+	signal aux_CWP: std_logic_vector(1 downto 0):=(others=>'0');
+	signal aux_c: std_logic;
+	-- PSR Modifier signals
+	signal aux_nzvc: std_logic_vector(3 downto 0):=(others=>'0');
 	-- mux signals
 	signal aux_muxout: std_logic_vector(31 downto 0):=(others=>'0');
 	-- alu signals
 	signal aux_aluout: std_logic_vector(31 downto 0):=(others=>'0');
-	-- PSR y PSR_Modifier signals
-	signal aux_nzvc: std_logic_vector(3 downto 0):=(others=>'0');
-	signal aux_c: std_logic;
-	signal aux_CWP: std_logic_vector(1 downto 0):=(others=>'0');
-	-- Windows Manager signals
-	signal aux_nCWP: std_logic_vector(1 downto 0):=(others=>'0');
-	signal aux_nrs1: std_logic_vector(5 downto 0):=(others=>'0');
-	signal aux_nrs2: std_logic_vector(5 downto 0):=(others=>'0');
-	signal aux_nrd: std_logic_vector(5 downto 0):=(others=>'0');
 	
 begin
 
@@ -164,58 +165,35 @@ begin
 		outInstruction => im_out
 	);
 	
-	inst_seu: seu PORT MAP(
-		imm13 => im_out(12 downto 0),
-		out_seu => aux_seuout
-		);
-		
-	inst_windowsmanger: windowsmanager PORT MAP(
+	inst_wm: windowsmanager PORT MAP(
 		op => im_out(31 downto 30),
-		op3 => im_out(24 downto 19),
-		cwp => aux_CWP,
+ 	   op3 => im_out(24 downto 19),
+		cwp => aux_CWP(1 downto 0),
 		rs1 => im_out(18 downto 14),
-		rs2 => im_out(4 downto 0),
-		rd => im_out(29 downto 25),
-		ncwp => aux_nCWP,
-		nrs1 => aux_nrs1,
-		nrs2 => aux_nrs2,
-		nrd => aux_nrd
+      rs2 => im_out(4 downto 0),
+      rd => im_out(29 downto 25),
+		ncwp => aux_ncwp,
+      nrs1 => aux_nrs1,
+      nrs2 => aux_nrs2,
+      nrd => aux_nrd
 		);
-		
 		
 	inst_rf: register_file PORT MAP(
-	   nRS1 => aux_nrs1,
+		nRS1 => aux_nrs1,
 		nRS2 => aux_nrs2,
 		nRD => aux_nrd,
 		DWR => aux_aluout,
 		RST => reset,
 		CRS1 => aux_crs1,
 		CRS2 => aux_crs2
-		);
-	
+		);	
+		
 	inst_uc: unidadControl PORT MAP(
 		op => im_out(31 downto 30),
 		op3 => im_out(24 downto 19),
 		aluop => aux_aluop
 		);
-	
-	inst_PSR_Modifier: PSR_Modifier PORT MAP(
-		aluop => aux_aluop,
-		out_ppal => aux_aluout,
-		crs1 => aux_crs1,
-		crs2 => aux_crs2,
-		nzvc => aux_nzvc
-		);
-	
-	inst_PSR: PSR PORT MAP(
-		clock => clock,
-		reset => reset,
-		nzvc => aux_nzvc,
-		nCWP => aux_nCWP,
-		CWP => aux_CWP,
-		c => aux_c
-		);
-	
+		
 	inst_mux: mux PORT MAP(
 		a => aux_crs2,
 		b => aux_seuout,
@@ -223,12 +201,34 @@ begin
 		out_mux => aux_muxout
 		);
 		
+	inst_seu: seu PORT MAP(
+		imm13 => im_out(12 downto 0),
+		out_seu => aux_seuout
+		);
+		
 	inst_alu: ALU PORT MAP(
 		crs1 => aux_crs1,
 		mux_out => aux_muxout,
-		alu_op => aux_aluop,
 		c => aux_c,
+		alu_op => aux_aluop,
 		alu_out => aux_aluout
+		);
+		
+	inst_psrm: PSR_Modifier PORT MAP(
+	   aluop => aux_aluop,
+      out_ppal => aux_aluout,
+      crs1 => aux_crs1(31),
+      crs2 => aux_muxout(31),
+      nzvc => aux_nzvc
+		);
+		
+	inst_psr: PSR PORT MAP(
+	   clock => clock,
+		reset => reset,
+		nzvc => aux_nzvc,
+		nCWP => aux_ncwp,
+		CWP => aux_CWP,
+		c => aux_c
 		);
 	
 	out_ppal <= aux_aluout;
