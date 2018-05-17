@@ -4,6 +4,8 @@ nor %g0, 0, %o1
 nor %g0, 0, %o2
 add %o1, %o2, %o4
 addx %g0, 1, %o5
+restore %g0, %g0, %g0 
+save %g0, %g0, %g0 
 sub %g1, %g2, %g3
 subcc %g3, 20, %g4
 subx %g4, 3000, %g1
