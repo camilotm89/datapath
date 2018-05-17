@@ -29,11 +29,11 @@ begin
 process(op, op3,cwp,rs1,rs2,rd)
 begin
 
-if(op = "11" and op3 = "111100")then--save 
+if(op = "10" and op3 = "111100")then--save 
 	ncwp_s <= (cwp-"01");
 
 else 
-	if(op = "11" and op3 = "111101")then-- restore
+	if(op = "10" and op3 = "111101")then-- restore
 		ncwp_s <= cwp+"01";
 	end if;
 end if;

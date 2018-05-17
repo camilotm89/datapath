@@ -14,8 +14,7 @@ signal salida_aluop : std_logic_vector (5 downto 0) := "000000";
 begin
 	process(op, op3)
 	begin
-		case(op)is
-			when "10" =>
+			if (op = "10")then
 			
 			case op3 is
 				when "000000" => ------> Add
@@ -58,20 +57,14 @@ begin
 					salida_aluop <= "010010";
 				when "010111" => ------> Xnorcc
 					salida_aluop <= "010011";
+				when "111100" => ------> Save
+					salida_aluop <= "000000"; -- Modifica CWP
+				when "111101" => ------> Restore
+					salida_aluop <= "000000"; -- Modifica CWP
 				when others =>
 					salida_aluop <= "111111";
 			end case;
-			
-			when "11" =>
-				case op3 is
-					when "111100" => ------> Save
-						salida_aluop <= "000000"; -- Modifica CWP
-					when "111101" => ------> Restore
-						salida_aluop <= "000000"; -- Modifica CWP
-					when others => salida_aluop <= "111111";
-				end case;
-			when others => salida_aluop <= "111111";		
-		end case;			
+		end if;
 			
 	end process;
 	
