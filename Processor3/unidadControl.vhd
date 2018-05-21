@@ -135,6 +135,26 @@ begin
 					WE_rf <= '0';
 					rf_s <= '1';
 			end case;
+			else if(op = "11")then
+			case op3 is
+				when "000000" => ------> Load
+					aluop <= "000000";
+					WR_dm <= '0';
+					WE_rf <= '1';
+					rf_s <= '1';----?????selector del mux 4 a 1
+				when "000100" => ------> Store word
+					aluop <= "000000";
+					WR_dm <= '0';
+					WE_rf <= '1';
+					rf_s <= '1';----?????selector del mux 4 a 1
+				when others =>
+					aluop <= "111111";
+					WR_dm <= '0';
+					WE_rf <= '0';
+					rf_s <= '1';
+				end case;			
+			end if;
+			
 		end if;
 			
 	end process;
