@@ -15,15 +15,17 @@ architecture Behavioral of mux is
 begin
 	process(a,b,sel)
 	begin
-		if (sel = '00')then
+		if (sel = "00")then
 			out_mux <= a;
-		else if (sel= '01')then
-			out_mux <= b;
-		else if (sel= '10')then
-			out_mux <= c;
-		else if (sel= '01')then
-			out_mux <= d;
-				
+			else if (sel= "01")then
+				out_mux <= b;
+				else if (sel= "10")then
+					out_mux <= c;
+					else if (sel= "01")then
+						out_mux <= d;							
+					end if;
+				end if;
+			end if;
 		end if;
 	end process;
 
