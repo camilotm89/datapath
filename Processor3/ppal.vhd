@@ -157,7 +157,7 @@ begin
 
 	inst_adder: adder PORT MAP(
 		A => "00000000000000000000000000000001",
-		B => aux_pcout,
+		B => aux_npcout,
 		C => out_adder
 		);
 		
