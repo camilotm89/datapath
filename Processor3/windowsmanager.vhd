@@ -96,3 +96,4 @@ ncwp <= ncwp_s;
 nrd  <= nrd_s;
 
 end Behavioral;
+

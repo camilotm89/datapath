@@ -5,14 +5,17 @@ entity unidadControl is
     Port ( op : in  STD_LOGIC_VECTOR (1 downto 0);
            op3 : in  STD_LOGIC_VECTOR (5 downto 0);
 			  nzvc : in STD_LOGIC_VECTOR (3 downto 0);
+			  cond : in STD_LOGIC_VECTOR (3 downto 0);
            aluop : out  STD_LOGIC_VECTOR (5 downto 0);
 			  WR_dm : out STD_LOGIC;
 			  WE_rf : out STD_LOGIC;
 			  rf_s: out STD_LOGIC
-			 );
+			);
 end unidadControl;
 
 architecture Behavioral of unidadControl is
+
+signal salida_aluop : std_logic_vector (5 downto 0) := "000000";
 
 begin
 	process(op, op3, nzvc)
@@ -136,26 +139,26 @@ begin
 					rf_s <= '1';
 			end case;
 			else if(op = "11")then
-			case op3 is
-				when "000000" => ------> Load
-					salida_aluop <= "000000";
-					WR_dm <= '0';
-					WE_rf <= '1';
-					rf_s <= '1';----?????selector del mux 4 a 1
-				when "000100" => ------> Store word
-					salida_aluop <= "000000";
-					WR_dm <= '0';
-					WE_rf <= '1';
-					rf_s <= '1';----?????selector del mux 4 a 1
-				when others =>
-					salida_aluop <= "111111";
-					WR_dm <= '0';
-					WE_rf <= '0';
-					rf_s <= '1';
-				end case;			
-			end if;
+				case op3 is
+					when "000000" => ------> Load
+						salida_aluop <= "000000";
+						WR_dm <= '0';
+						WE_rf <= '1';
+						rf_s <= '1';----?????selector del mux 4 a 1
+					when "000100" => ------> Store word
+						salida_aluop <= "000000";
+						WR_dm <= '0';
+						WE_rf <= '1';
+						rf_s <= '1';----?????selector del mux 4 a 1
+					when others =>
+						salida_aluop <= "111111";
+						WR_dm <= '0';
+						WE_rf <= '0';
+						rf_s <= '1';
+					end case;			
+				end if;
 			
-		end if;
+			end if;
 			
 	end process;
 			

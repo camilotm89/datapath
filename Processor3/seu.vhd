@@ -8,6 +8,8 @@ end seu;
 
 architecture Behavioral of seu is
 
+signal out_seu_s : STD_LOGIC_VECTOR(31 downto 0):=(others=>'0');
+
 begin
 	process(imm13)
 	begin
@@ -18,7 +20,10 @@ begin
 		end if;
 		
 	out_seu_s(12 downto 0) <= imm13;
+
 	end process;
+
+out_seu <= out_seu_s;
 
 end Behavioral;
 

@@ -3,6 +3,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.numeric_std.all;
 use std.textio.all;
 
 entity instructionMemory is
@@ -31,11 +32,11 @@ architecture Behavioral of instructionMemory is
 		return temp_mem;
 	end function;
 	
-	signal instructions : rom_type := InitRomFromFile("test.data");
+	signal instructions : rom_type := InitRomFromFile("codigo.data");
 	
 begin
 	--process(rst,address, instructions,clk)
-	process(rst,address, instructions)
+	process(rst,address)
 	begin
 		--if(rising_edge(clk))then
 			if(rst = '1')then
