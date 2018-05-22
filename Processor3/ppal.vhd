@@ -148,6 +148,7 @@ signal out_adder: std_logic_vector(31 downto 0):=(others=>'0');
 	signal aux_aluop: std_logic_vector(5 downto 0):=(others=>'0');
 	signal aux_WRMEM: std_logic;
 	signal aux_WERF: std_logic;
+	signal aux_rfs: std_logic;
 	-- windows manager signals
 	signal aux_ncwp: std_logic_vector(1 downto 0):=(others=>'0');
 	signal aux_nrs1: std_logic_vector(5 downto 0):=(others=>'0');
@@ -164,6 +165,8 @@ signal out_adder: std_logic_vector(31 downto 0):=(others=>'0');
 	signal aux_aluout: std_logic_vector(31 downto 0):=(others=>'0');
 	-- DataMemory signals
 	signal aux_DMCS1: std_logic_vector(31 downto 0):=(others=>'0');
+	-- out mux 4-1 signals
+	signal aux_datatoreg: std_logic_vector(31 downto 0):= (others=>'0');
 	
 begin
 
@@ -213,7 +216,8 @@ begin
 		nzvc => aux_nzvc,
 		WR_dm => aux_WRMEM,
 		WE_rf => aux_WERF,
-		aluop => aux_aluop
+		aluop => aux_aluop,
+		rf_s => aux_rfs
 		);
 		
 	inst_mux: mux PORT MAP(
@@ -223,13 +227,22 @@ begin
 		out_mux => aux_muxout
 		);
 	
-	inst_mux4_1: mux4_1 PORT MAP(
-		a => 
-		b =>
-		c => out_adder,
-		d => aux_aluout,
-		sel =>
-		out_mux =>
+	--inst_mux4_1: mux4_1 PORT MAP(
+		--a => 
+		--b =>
+		--c => out_adder,
+		--d => aux_aluout,
+		--sel =>
+		--out_mux =>
+		--);
+		
+	inst_mux4_1_DMtoRF: mux4_1 PORT MAP(
+		a => aux_DMCS1,
+		b => aux_aluout,
+		c => aux_pcout,
+		d => "00000000000000000000000000000000",
+		sel => aux_rfs,--temporalmente de 1 bit, debe tener dos 
+		out_mux =>aux_datatoreg
 		);
 		
 	inst_DM: DataMemory PORT MAP(
