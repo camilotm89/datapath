@@ -8,9 +8,9 @@ entity mux4_1 is
            d : in  STD_LOGIC_VECTOR (31 downto 0);
            sel : in  STD_LOGIC_VECTOR (1 downto 0);
            out_mux : out  STD_LOGIC_VECTOR (31 downto 0));
-end mux;
+end mux4_1;
 
-architecture Behavioral of mux is
+architecture Behavioral of mux4_1 is
 
 begin
 	process(a,b,sel)
