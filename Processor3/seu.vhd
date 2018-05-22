@@ -12,12 +12,12 @@ begin
 	process(imm13)
 	begin
 		if(imm13(12) = '1')then
-			out_seu(12 downto 0) <= imm13;
-			out_seu(31 downto 13) <= (others=>'1');
+			out_seu_s(31 downto 13) <= (others=>'1');
 		else
-			out_seu(12 downto 0) <= imm13;
-			out_seu(31 downto 13) <= (others=>'0');
+			out_seu_s(31 downto 13) <= (others=>'0');
 		end if;
+		
+	out_seu_s(12 downto 0) <= imm13;
 	end process;
 
 end Behavioral;
