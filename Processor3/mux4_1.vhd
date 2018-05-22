@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity mux is
+entity mux4_1 is
     Port ( a : in  STD_LOGIC_VECTOR (31 downto 0);
            b : in  STD_LOGIC_VECTOR (31 downto 0);
 	   c : in  STD_LOGIC_VECTOR (31 downto 0);
