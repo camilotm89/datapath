@@ -35,6 +35,12 @@ architecture Behavioral of ppal is
 		  );
 	end component;
 	
+	component seu22
+	port ( disp22 : in  STD_LOGIC_VECTOR (21 downto 0);
+          out_disp22 : out  STD_LOGIC_VECTOR (31 downto 0)
+		  );
+	end component;
+	
 	component seu
    port (imm13 : in  STD_LOGIC_VECTOR (12 downto 0);
          out_seu : out  STD_LOGIC_VECTOR (31 downto 0)
@@ -84,7 +90,7 @@ architecture Behavioral of ppal is
           aluop : out  STD_LOGIC_VECTOR (5 downto 0);
 			 WR_dm : out STD_LOGIC;
 			 WE_rf : out STD_LOGIC;
-			 rf_s: out STD_LOGIC
+			 rf_s: out STD_LOGIC_VECTOR(1 downto 0)
 			);
 	end component;
 
@@ -102,7 +108,7 @@ architecture Behavioral of ppal is
 			  out_ppal : in  STD_LOGIC_VECTOR (31 downto 0);
            CRD : in  STD_LOGIC_VECTOR (31 downto 0);
            WRMEM : in  STD_LOGIC;
-           DMCS1 : out  STD_LOGIC_VECTOR (31 downto 0)
+           DATOMEM : out  STD_LOGIC_VECTOR (31 downto 0)
 			);
 	end component;
 	
@@ -133,9 +139,13 @@ architecture Behavioral of ppal is
 			);
 	end component;
 	
-signal out_adder: std_logic_vector(31 downto 0):=(others=>'0');
+	signal out_adder: std_logic_vector(31 downto 0):=(others=>'0');
+	signal out_adder22: std_logic_vector(31 downto 0):=(others=>'0');
+	signal out_adder30: std_logic_vector(31 downto 0):=(others=>'0');
 	signal aux_npcout: std_logic_vector(31 downto 0):=(others=>'0');
 	signal aux_pcout: std_logic_vector(31 downto 0):=(others=>'0');
+	signal aux_out_mux4_1: std_logic_vector(31 downto 0):=(others=>'0');
+	signal aux_A: std_logic_vector(31 downto 0):=(others=>'0');
 	-- im signals
 	signal im_out: std_logic_vector(31 downto 0):=(others=>'0');
 	-- seu signals
@@ -148,7 +158,8 @@ signal out_adder: std_logic_vector(31 downto 0):=(others=>'0');
 	signal aux_aluop: std_logic_vector(5 downto 0):=(others=>'0');
 	signal aux_WRMEM: std_logic;
 	signal aux_WERF: std_logic;
-	signal aux_rfs: std_logic;
+	signal aux_rfs: std_logic_vector(1 downto 0):=(others=>'0');
+	signal aux_pc_src: std_logic_vector(1 downto 0):=(others=>'0');
 	-- windows manager signals
 	signal aux_ncwp: std_logic_vector(1 downto 0):=(others=>'0');
 	signal aux_nrs1: std_logic_vector(5 downto 0):=(others=>'0');
@@ -164,20 +175,37 @@ signal out_adder: std_logic_vector(31 downto 0):=(others=>'0');
 	-- alu signals
 	signal aux_aluout: std_logic_vector(31 downto 0):=(others=>'0');
 	-- DataMemory signals
-	signal aux_DMCS1: std_logic_vector(31 downto 0):=(others=>'0');
-	-- out mux 4-1 signals
+	signal aux_DATOMEM: std_logic_vector(31 downto 0):=(others=>'0');
+	-- out mux 3-1 signals
 	signal aux_datatoreg: std_logic_vector(31 downto 0):= (others=>'0');
+	-- Seu22 signals
+	signal aux_out_disp22: std_logic_vector(31 downto 0):=(others=>'0');
 	
 begin
+
+
+aux_A <= "00"&im_out(29 downto 0);
 
 	inst_adder: adder PORT MAP(
 		A => "00000000000000000000000000000001",
 		B => aux_npcout,
 		C => out_adder
 		);
+	
+	inst_adder_disp22: adder PORT MAP(
+		A => aux_pcout,
+		B => aux_out_disp22,
+		C => out_adder22
+		);
+	
+	inst_adder_disp30: adder PORT MAP(
+		A => aux_A,
+		B => aux_pcout,
+		C => out_adder30
+		);
 		
 	inst_npc: pc PORT MAP(
-		pcadder => out_adder,
+		pcadder => aux_out_mux4_1,
 		rst => reset,
 		clk => clock,
 		PCout => aux_npcout
@@ -227,22 +255,27 @@ begin
 		out_mux => aux_muxout
 		);
 	
-	--inst_mux4_1: mux4_1 PORT MAP(
-		--a => 
-		--b =>
-		--c => out_adder,
-		--d => aux_aluout,
-		--sel =>
-		--out_mux =>
-		--);
-		
 	inst_mux4_1_DMtoRF: mux4_1 PORT MAP(
-		a => aux_DMCS1,
+		a => aux_DATOMEM,
 		b => aux_aluout,
 		c => aux_pcout,
 		d => "00000000000000000000000000000000",
 		sel => aux_rfs,--temporalmente de 1 bit, debe tener dos 
-		out_mux =>aux_datatoreg
+		out_mux => aux_datatoreg
+		);
+
+	inst_seu_disp22: seu22 PORT MAP(
+		disp22 => im_out(21 downto 0),
+		out_disp22 => aux_out_disp22
+		);
+	
+	inst_mux4_1: mux4_1 PORT MAP(
+		a => out_adder30,
+		b => out_adder22,
+		c => out_adder,
+		d => aux_aluout,
+		sel => aux_pc_src,
+		out_mux => aux_out_mux4_1
 		);
 		
 	inst_DM: DataMemory PORT MAP(
@@ -250,7 +283,7 @@ begin
 		out_ppal => aux_aluout,
 		CRD => aux_crd,
 		WRMEM => aux_WRMEM,
-		DMCS1 => aux_DMCS1
+		DATOMEM => aux_DATOMEM
 		);
 		
 	inst_seu: seu PORT MAP(
@@ -294,6 +327,6 @@ begin
 		c => aux_c
 		);
 	
-	out_ppal <= aux_aluout;
+	out_ppal <= aux_datatoreg;
 	
 end Behavioral;

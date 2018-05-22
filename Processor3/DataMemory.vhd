@@ -7,7 +7,7 @@ entity DataMemory is
 			  out_ppal : in  STD_LOGIC_VECTOR (31 downto 0);
            CRD : in  STD_LOGIC_VECTOR (31 downto 0);
            WRMEM : in  STD_LOGIC;
-           DMCS1 : out  STD_LOGIC_VECTOR (31 downto 0));
+           DATOMEM : out  STD_LOGIC_VECTOR (31 downto 0));
 end DataMemory;
 
 architecture Behavioral of DataMemory is
@@ -19,7 +19,7 @@ begin
 	process(reset, out_ppal, CRD, WRMEM)
 		begin
 			if(WRMEM = '0')then
-				DMCS1 <= ram(conv_integer(out_ppal(5 downto 0)));
+				DATOMEM <= ram(conv_integer(out_ppal(5 downto 0)));
 			else
 				ram(conv_integer(out_ppal(5 downto 0))) <= CRD;
 			end if;
@@ -27,4 +27,3 @@ begin
 				
 
 end Behavioral;
-
