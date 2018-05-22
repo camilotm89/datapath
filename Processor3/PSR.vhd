@@ -12,22 +12,24 @@ end PSR;
 
 architecture Behavioral of PSR is
 
-signal Registro: STD_LOGIC_VECTOR (31 downto 0):= (others=>'0');
+signal s_cwp: STD_LOGIC_VECTOR (1 downto 0):= (others=>'0');
+signal s_carry: STD_LOGIC :='0';
 
 begin
-		process(clock)
+	process(clock, reset, nzvc)
 		begin
-		if (rising_edge(clock))then
 			if (reset = '1')then
-				CWP <= "00";
-				c <= '0';
+				s_cwp<= "00";
+				s_carry <= '0';
 			else
-				Registro(23 downto 20) <= nzvc;
-				Registro(1 downto 0) <= nCWP;
-				c <= Registro(20);
-				CWP <= Registro(1 downto 0);
+				if(rising_edge(clock)) then
+				s_carry <= nzvc(0);
+				s_cwp <= nCWP;
 			end if;
 		end if;
-		end process;
+	end process;
+
+CWP <= s_cwp;
+c <= s_carry;
 
 end Behavioral;
