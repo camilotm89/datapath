@@ -10,14 +10,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity mux is
-    Port ( a : in  STD_LOGIC_VECTOR (31 downto 0);
-           b : in  STD_LOGIC_VECTOR (31 downto 0);
+entity mux_wm_rf is
+    Port ( a : in  STD_LOGIC_VECTOR (5 downto 0);
+           b : in  STD_LOGIC_VECTOR (5 downto 0);
            sel : in  STD_LOGIC;
-           out_mux : out  STD_LOGIC_VECTOR (31 downto 0));
-end mux;
+           out_mux : out  STD_LOGIC_VECTOR (5 downto 0));
+end mux_wm_rf;
 
-architecture Behavioral of mux is
+architecture Behavioral of mux_wm_rf is
 
 begin
 	process(a,b,sel)
@@ -30,4 +30,3 @@ begin
 	end process;
 
 end Behavioral;
-

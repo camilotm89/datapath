@@ -67,7 +67,8 @@ architecture Behavioral of ppal is
 			  ncwp : out STD_LOGIC_VECTOR (1 downto 0);
            nrs1 : out  STD_LOGIC_VECTOR (5 downto 0);
            nrs2 : out  STD_LOGIC_VECTOR (5 downto 0);
-           nrd : out  STD_LOGIC_VECTOR (5 downto 0)
+           nrd : out  STD_LOGIC_VECTOR (5 downto 0);
+           o7 : out STD_LOGIC_VECTOR (5 downto 0)
 			);
 	end component;
 	
@@ -85,12 +86,16 @@ architecture Behavioral of ppal is
 	
 	component unidadControl
    port ( op : in  STD_LOGIC_VECTOR (1 downto 0);
-          op3 : in  STD_LOGIC_VECTOR (5 downto 0);
-			 nzvc : in STD_LOGIC_VECTOR (3 downto 0);
-          aluop : out  STD_LOGIC_VECTOR (5 downto 0);
-			 WR_dm : out STD_LOGIC;
-			 WE_rf : out STD_LOGIC;
-			 rf_s: out STD_LOGIC_VECTOR(1 downto 0)
+			  op2 : in STD_LOGIC_VECTOR (2 downto 0);
+           op3 : in  STD_LOGIC_VECTOR (5 downto 0);
+			  nzvc : in STD_LOGIC_VECTOR (3 downto 0);
+			  cond : in STD_LOGIC_VECTOR (3 downto 0);
+			  pc_src: out  STD_LOGIC_VECTOR (1 downto 0); 
+           aluop : out  STD_LOGIC_VECTOR (5 downto 0);
+			  WR_dm : out STD_LOGIC;
+			  WE_rf : out STD_LOGIC;
+			  rf_s: out STD_LOGIC_VECTOR (1 downto 0);
+			  rf_d: out STD_LOGIC
 			);
 	end component;
 
@@ -130,6 +135,14 @@ architecture Behavioral of ppal is
 			);
 	end component;
 	
+   component mux_wm_rf
+   port ( a : in  STD_LOGIC_VECTOR (5 downto 0);
+          b : in  STD_LOGIC_VECTOR (5 downto 0);
+          sel : in  STD_LOGIC;
+          out_mux : out  STD_LOGIC_VECTOR (5 downto 0)
+			);
+	end component;
+   
 	component ALU
    port ( crs1 : in  STD_LOGIC_VECTOR (31 downto 0);
           mux_out : in  STD_LOGIC_VECTOR (31 downto 0);
@@ -151,6 +164,7 @@ architecture Behavioral of ppal is
 	-- seu signals
 	signal aux_seuout: std_logic_vector(31 downto 0):=(others=>'0');
 	-- rf signals
+   signal aux_mux_nrd: std_logic_vector(5 downto 0):=(others=>'0');
 	signal aux_crs1: std_logic_vector(31 downto 0):=(others=>'0');
 	signal aux_crs2: std_logic_vector(31 downto 0):=(others=>'0');
 	signal aux_crd: std_logic_vector(31 downto 0):=(others=>'0');
@@ -160,11 +174,13 @@ architecture Behavioral of ppal is
 	signal aux_WERF: std_logic;
 	signal aux_rfs: std_logic_vector(1 downto 0):=(others=>'0');
 	signal aux_pc_src: std_logic_vector(1 downto 0):=(others=>'0');
+   signal aux_rf_d: std_logic;
 	-- windows manager signals
 	signal aux_ncwp: std_logic_vector(1 downto 0):=(others=>'0');
 	signal aux_nrs1: std_logic_vector(5 downto 0):=(others=>'0');
 	signal aux_nrs2: std_logic_vector(5 downto 0):=(others=>'0');
 	signal aux_nrd: std_logic_vector(5 downto 0):=(others=>'0');
+   signal aux_o7: std_logic_vector(5 downto 0):=(others=>'0');
 	-- PSR signals
 	signal aux_CWP: std_logic_vector(1 downto 0):=(others=>'0');
 	signal aux_c: std_logic;
@@ -235,17 +251,22 @@ aux_A <= "00"&im_out(29 downto 0);
 		ncwp => aux_ncwp,
       nrs1 => aux_nrs1,
       nrs2 => aux_nrs2,
-      nrd => aux_nrd
+      nrd => aux_nrd,
+      o7 => aux_o7
 		);
 		
 	inst_uc: unidadControl PORT MAP(
 		op => im_out(31 downto 30),
+      op2 => im_out(24 downto 22),
 		op3 => im_out(24 downto 19),
 		nzvc => aux_nzvc,
+      cond => im_out(28 downto 25),
+      pc_src => aux_pc_src,
 		WR_dm => aux_WRMEM,
 		WE_rf => aux_WERF,
 		aluop => aux_aluop,
-		rf_s => aux_rfs
+		rf_s => aux_rfs,
+      rf_d => aux_rf_d
 		);
 		
 	inst_mux: mux PORT MAP(
@@ -253,6 +274,13 @@ aux_A <= "00"&im_out(29 downto 0);
 		b => aux_seuout,
 		sel => im_out(13),
 		out_mux => aux_muxout
+		);
+      
+   inst_mux_toRF: mux_wm_rf PORT MAP(
+		a => aux_nrd,
+		b => aux_o7, --15 ?
+		sel => aux_rf_d,
+		out_mux => aux_mux_nrd
 		);
 	
 	inst_mux4_1_DMtoRF: mux4_1 PORT MAP(
@@ -302,8 +330,8 @@ aux_A <= "00"&im_out(29 downto 0);
 	inst_rf: register_file PORT MAP(
 		nRS1 => aux_nrs1,
 		nRS2 => aux_nrs2,
-		nRD => aux_nrd,
-		DWR => aux_aluout,
+		nRD => aux_mux_nrd,
+		DWR => aux_datatoreg,
 		RST => reset,
 		CRS1 => aux_crs1,
 		CRS2 => aux_crs2,

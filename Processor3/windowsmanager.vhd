@@ -16,7 +16,8 @@ entity windowsmanager is
 			  ncwp : out STD_LOGIC_VECTOR (1 downto 0):="00";
            nrs1 : out  STD_LOGIC_VECTOR (5 downto 0);
            nrs2 : out  STD_LOGIC_VECTOR (5 downto 0);
-           nrd : out  STD_LOGIC_VECTOR (5 downto 0));
+           nrd : out  STD_LOGIC_VECTOR (5 downto 0);
+           o7: out STD_LOGIC_VECTOR(5 downto 0));
 end windowsmanager;
 
 architecture Behavioral of windowsmanager is
@@ -24,8 +25,12 @@ architecture Behavioral of windowsmanager is
 	signal nrs2_s : STD_LOGIC_VECTOR(5 downto 0):=(others=>'0');
 	signal ncwp_s : STD_LOGIC_VECTOR(1 downto 0):=(others=>'0');
 	signal nrd_s  : STD_LOGIC_VECTOR(5 downto 0):=(others=>'0');
+   signal o7_s   : STD_LOGIC_VECTOR(6 downto 0):=(others=>'0');
 
 begin
+o7_s <= cwp*"10000";
+o7 <= o7_s(5 downto 0)+"001111";
+
 process(op, op3,cwp,rs1,rs2,rd)
 begin
 

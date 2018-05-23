@@ -11,7 +11,7 @@ entity unidadControl is
            aluop : out  STD_LOGIC_VECTOR (5 downto 0);
 			  WR_dm : out STD_LOGIC;
 			  WE_rf : out STD_LOGIC;
-			  rf_s: out STD_LOGIC;
+			  rf_s: out STD_LOGIC_VECTOR (1 downto 0);
 			  rf_d: out STD_LOGIC
 			);
 end unidadControl;
@@ -24,8 +24,7 @@ begin
 	process(op, op2, op3, nzvc)
 	begin
 		if(op = "00") then
-			case op2 is
-				when "010" =>
+			if(op2 ="010") then
 					case cond is
 						
 						when "1000" => --BA
@@ -33,7 +32,7 @@ begin
 							pc_src <= "10";  --pc + disp22
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 						
 						when "0000" => --BN
@@ -41,7 +40,7 @@ begin
 							pc_src <= "11";  --pc
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 						
 						when "1001" => --BNE
@@ -53,7 +52,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 						
 						when "0001" => --BE
@@ -65,7 +64,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 						
 						when "1010" => --BG
@@ -77,7 +76,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 						
 						when "0010" => --BLE
@@ -89,7 +88,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 							
 						when "1011" => --BGE
@@ -101,7 +100,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 							
 						when "0011" => --BL
@@ -113,7 +112,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 							
 						when "1100" => --BGU
@@ -125,7 +124,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 							
 						when "0100" => --BLEU
@@ -137,7 +136,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 							
 						when "1101" => --BCC
@@ -149,7 +148,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 							
 						when "0101" => --BCS
@@ -161,7 +160,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 							
 						when "1110" => --BPOS
@@ -173,7 +172,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 							
 						when "0110" => --BNEG
@@ -185,7 +184,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 							
 						when "1111" => --BVC
@@ -197,7 +196,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 							
 						when "0111" => --BVS
@@ -209,7 +208,7 @@ begin
 							end if;
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '0';
+							rf_s <= "00";
 							rf_d <= '0';
 						
 						when others => --BVS
@@ -217,11 +216,11 @@ begin
 							pc_src <= "11";  --pc
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= '1';
+							rf_s <= "01";
 							rf_d <= '0';
 					
 					end case;
-				end case;
+				end if;
 				
 		else if(op = "10") then
 			case op3 is
@@ -229,117 +228,117 @@ begin
 					salida_aluop <= "000000";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "000100" => ------> Sub
 					salida_aluop <= "000001";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "000001" => ------> And
 					salida_aluop <= "000010";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "000010" => ------> Or
 					salida_aluop <= "000011";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "000101" => ------> Andn
 					salida_aluop <= "000100";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "000110" => ------> Orn
 					salida_aluop <= "000101";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "000011" => ------> Xor
 					salida_aluop <= "000110";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "000111" => ------> Xnor
 					salida_aluop <= "000111";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "010000" => ------> Addcc
 					salida_aluop <= "001000";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "001000" => ------> AddX
 					salida_aluop <= "001001";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "011000" => ------> AddXcc
 					salida_aluop <= "001010";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "010100" => ------> Subcc
 					salida_aluop <= "001011";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "001100" => ------> SubX
 					salida_aluop <= "001100";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "011100" => ------> SubXcc
 					salida_aluop <= "001101";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "010001" => ------> Andcc
 					salida_aluop <= "001110";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "010101" => ------> Andncc
 					salida_aluop <= "001111";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "010010" => ------> Orcc
 					salida_aluop <= "010000";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "010110" => ------> Orncc
 					salida_aluop <= "010001";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "010011" => ------> Xorcc
 					salida_aluop <= "010010";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "010111" => ------> Xnorcc
 					salida_aluop <= "010011";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "111100" => ------> Save
 					salida_aluop <= "000000"; -- Modifica CWP
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when "111101" => ------> Restore
 					salida_aluop <= "000000"; -- Modifica CWP
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';
+					rf_s <= "01";
 				when others =>
 					salida_aluop <= "111111";
 					WR_dm <= '0';
 					WE_rf <= '0';
-					rf_s <= '1';
+					rf_s <= "01";
 			end case;
 		else if(op = "11")then
 			case op3 is
@@ -347,17 +346,17 @@ begin
 					salida_aluop <= "000000";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';----?????selector del mux 4 a 1
+					rf_s <= "01";----?????selector del mux 4 a 1
 				when "000100" => ------> Store word
 					salida_aluop <= "000000";
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= '1';----?????selector del mux 4 a 1
+					rf_s <= "01";----?????selector del mux 4 a 1
 				when others =>
 					salida_aluop <= "111111";
 					WR_dm <= '0';
 					WE_rf <= '0';
-					rf_s <= '1';
+					rf_s <= "01";
 			end case;			
 		end if;
 		end if;
