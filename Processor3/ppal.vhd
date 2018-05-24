@@ -1,6 +1,5 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity ppal is
     port ( reset : in  STD_LOGIC;
@@ -41,6 +40,11 @@ architecture Behavioral of ppal is
 		  );
 	end component;
 	
+	component seu30 is
+    Port ( disp30 : in  STD_LOGIC_VECTOR (29 downto 0);
+           out_disp30 : out  STD_LOGIC_VECTOR (31 downto 0));
+	end component;
+	
 	component seu
    port (imm13 : in  STD_LOGIC_VECTOR (12 downto 0);
          out_seu : out  STD_LOGIC_VECTOR (31 downto 0)
@@ -78,6 +82,7 @@ architecture Behavioral of ppal is
           nRD : in  STD_LOGIC_VECTOR (5 downto 0);
           DWR : in  STD_LOGIC_VECTOR (31 downto 0);
           RST : in  STD_LOGIC;
+			 WE : in STD_LOGIC;
           CRS1 : out  STD_LOGIC_VECTOR (31 downto 0);
           CRS2 : out  STD_LOGIC_VECTOR (31 downto 0);
 			 CRD : out STD_LOGIC_VECTOR (31 downto 0)
@@ -133,6 +138,14 @@ architecture Behavioral of ppal is
           sel : in  STD_LOGIC;
           out_mux : out  STD_LOGIC_VECTOR (31 downto 0)
 			);
+	end component;
+	
+	component mux_3_1 is
+    port ( a : in  STD_LOGIC_VECTOR (31 downto 0);
+           b : in  STD_LOGIC_VECTOR (31 downto 0);
+           c : in  STD_LOGIC_VECTOR (31 downto 0);
+           sel : in  STD_LOGIC_VECTOR (1 downto 0);
+           out_mux : out  STD_LOGIC_VECTOR (31 downto 0));
 	end component;
 	
    component mux_wm_rf
@@ -196,14 +209,16 @@ architecture Behavioral of ppal is
 	signal aux_datatoreg: std_logic_vector(31 downto 0):= (others=>'0');
 	-- Seu22 signals
 	signal aux_out_disp22: std_logic_vector(31 downto 0):=(others=>'0');
+	-- Seu30 signals
+	signal aux_out_disp30: std_logic_vector(31 downto 0):=(others=>'0');
+	-- Mux4_1 signals
+	signal aux_empty_signal: std_logic_vector(31 downto 0):=(others=>'0');
 	
 begin
 
 
-aux_A <= "00"&im_out(29 downto 0);
-
 	inst_adder: adder PORT MAP(
-		A => "00000000000000000000000000000001",
+		A => x"00000001",
 		B => aux_npcout,
 		C => out_adder
 		);
@@ -215,7 +230,7 @@ aux_A <= "00"&im_out(29 downto 0);
 		);
 	
 	inst_adder_disp30: adder PORT MAP(
-		A => aux_A,
+		A => aux_out_disp30,
 		B => aux_pcout,
 		C => out_adder30
 		);
@@ -255,6 +270,25 @@ aux_A <= "00"&im_out(29 downto 0);
       o7 => aux_o7
 		);
 		
+	inst_rf: register_file PORT MAP(
+		nRS1 => aux_nrs1,
+		nRS2 => aux_nrs2,
+		nRD => aux_mux_nrd,
+		DWR => aux_datatoreg,
+		RST => reset,
+		WE => aux_WERF,
+		CRS1 => aux_crs1,
+		CRS2 => aux_crs2,
+		CRD => aux_CRD
+		);	
+		
+	inst_mux_toRF: mux_wm_rf PORT MAP(
+		a => aux_nrd,
+		b => aux_o7, --15 ?
+		sel => aux_rf_d,
+		out_mux => aux_mux_nrd
+		);
+		
 	inst_uc: unidadControl PORT MAP(
 		op => im_out(31 downto 30),
       op2 => im_out(24 downto 22),
@@ -275,45 +309,7 @@ aux_A <= "00"&im_out(29 downto 0);
 		sel => im_out(13),
 		out_mux => aux_muxout
 		);
-      
-   inst_mux_toRF: mux_wm_rf PORT MAP(
-		a => aux_nrd,
-		b => aux_o7, --15 ?
-		sel => aux_rf_d,
-		out_mux => aux_mux_nrd
-		);
-	
-	inst_mux4_1_DMtoRF: mux4_1 PORT MAP(
-		a => aux_DATOMEM,
-		b => aux_aluout,
-		c => aux_pcout,
-		d => "00000000000000000000000000000000",
-		sel => aux_rfs,--temporalmente de 1 bit, debe tener dos 
-		out_mux => aux_datatoreg
-		);
-
-	inst_seu_disp22: seu22 PORT MAP(
-		disp22 => im_out(21 downto 0),
-		out_disp22 => aux_out_disp22
-		);
-	
-	inst_mux4_1: mux4_1 PORT MAP(
-		a => out_adder30,
-		b => out_adder22,
-		c => out_adder,
-		d => aux_aluout,
-		sel => aux_pc_src,
-		out_mux => aux_out_mux4_1
-		);
-		
-	inst_DM: DataMemory PORT MAP(
-		reset => reset,
-		out_ppal => aux_aluout,
-		CRD => aux_crd,
-		WRMEM => aux_WRMEM,
-		DATOMEM => aux_DATOMEM
-		);
-		
+    
 	inst_seu: seu PORT MAP(
 		imm13 => im_out(12 downto 0),
 		out_seu => aux_seuout
@@ -326,17 +322,6 @@ aux_A <= "00"&im_out(29 downto 0);
 		alu_op => aux_aluop,
 		alu_out => aux_aluout
 		);
-		
-	inst_rf: register_file PORT MAP(
-		nRS1 => aux_nrs1,
-		nRS2 => aux_nrs2,
-		nRD => aux_mux_nrd,
-		DWR => aux_datatoreg,
-		RST => reset,
-		CRS1 => aux_crs1,
-		CRS2 => aux_crs2,
-		CRD => aux_CRD
-		);	
 		
 	inst_psrm: PSR_Modifier PORT MAP(
 	   aluop => aux_aluop,
@@ -353,6 +338,41 @@ aux_A <= "00"&im_out(29 downto 0);
 		nCWP => aux_ncwp,
 		CWP => aux_CWP,
 		c => aux_c
+		);
+		
+	inst_DM: DataMemory PORT MAP(
+		reset => reset,
+		out_ppal => aux_aluout,
+		CRD => aux_crd,
+		WRMEM => aux_WRMEM,
+		DATOMEM => aux_DATOMEM
+		);
+		
+	inst_mux4_1: mux4_1 PORT MAP(
+		a => out_adder30,
+		b => out_adder22,
+		c => out_adder,
+		d => aux_aluout,
+		sel => aux_pc_src,
+		out_mux => aux_out_mux4_1
+		);
+
+	inst_seu_disp22: seu22 PORT MAP(
+		disp22 => im_out(21 downto 0),
+		out_disp22 => aux_out_disp22
+		);
+		
+	inst_seu_disp30: seu30 PORT MAP(
+		disp30 => im_out(29 downto 0),
+      out_disp30 => aux_out_disp30
+		);
+	
+	inst_mux3_1_DMtoRF: mux_3_1 PORT MAP(
+		a => aux_DATOMEM,
+		b => aux_aluout,
+		c => aux_pcout,
+		sel => aux_rfs, 
+		out_mux => aux_datatoreg
 		);
 	
 	out_ppal <= aux_datatoreg;
