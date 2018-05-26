@@ -54,7 +54,7 @@ BEGIN
    stim_proc: process
    begin		
        reset<='1';
-      wait for 100 ns;	
+      wait for 40 ns;	
 		reset<='0';
 			
 	wait;

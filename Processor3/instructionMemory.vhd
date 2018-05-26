@@ -32,7 +32,7 @@ architecture Behavioral of instructionMemory is
 		return temp_mem;
 	end function;
 	
-	signal instructions : rom_type := InitRomFromFile("codigo.data");
+	signal instructions : rom_type := InitRomFromFile("testJMPL.data");
 	
 begin
 	--process(rst,address, instructions,clk)

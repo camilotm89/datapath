@@ -213,6 +213,7 @@ architecture Behavioral of ppal is
 	signal aux_out_disp30: std_logic_vector(31 downto 0):=(others=>'0');
 	-- Mux4_1 signals
 	signal aux_empty_signal: std_logic_vector(31 downto 0):=(others=>'0');
+	signal aux_adderppal: std_logic_vector(31 downto 0):=(others=>'0');
 	
 begin
 
@@ -349,10 +350,10 @@ begin
 		);
 		
 	inst_mux4_1: mux4_1 PORT MAP(
-		a => out_adder30,
+		a => aux_aluout,
 		b => out_adder22,
-		c => out_adder,
-		d => aux_aluout,
+		c => out_adder30,
+		d => out_adder,
 		sel => aux_pc_src,
 		out_mux => aux_out_mux4_1
 		);

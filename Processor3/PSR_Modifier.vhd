@@ -17,7 +17,7 @@ signal nzvc_s : STD_LOGIC_VECTOR(3 downto 0):= "0000";
 begin
 		process(aluop, out_ppal, crs1, crs2)
 			begin
-				nzvc_s(0) <='0'; --vuelve a poner en '0' el carri al llamar alguna operación cc
+				nzvc_s(0) <='0'; --vuelve a poner en '0' el carry al llamar alguna operación cc
 				if (aluop = "001000" or aluop = "001010")then -- Addcc y AddXcc
 					nzvc_s(3) <= out_ppal(31); --N
 					if(out_ppal = x"00000000")then -- Z

@@ -21,8 +21,16 @@ architecture Behavioral of unidadControl is
 signal salida_aluop : std_logic_vector (5 downto 0) := "000000";
 
 begin
-	process(op, op2, op3, nzvc)
+	process(op, op2, op3, cond, nzvc)
 	begin
+		if (op = "01") then -- CALL
+			salida_aluop <= "111111";
+			pc_src <= "01";  --pc + disp30
+			WR_dm <= '0';
+			WE_rf <= '1';
+			rf_s <= "10";
+			rf_d <= '1';
+			else
 		if(op = "00") then
 			if(op2 ="010") then
 					case cond is
@@ -220,10 +228,10 @@ begin
 						
 						when others =>
 							salida_aluop <= "111111";
-							pc_src <= "11";  --pc
+							pc_src <= "00";  --pc
 							WR_dm <= '0';
 							WE_rf <= '0';
-							rf_s <= "01";
+							rf_s <= "00";
 							rf_d <= '0';
 							
 					
@@ -443,7 +451,7 @@ begin
 					pc_src <= "11"; --pc
 					WR_dm <= '0';
 					WE_rf <= '1';
-					rf_s <= "01";----?????selector del mux 4 a 1
+					rf_s <= "00";----?????selector del mux 4 a 1
 					rf_d <= '0';
 					
 					
@@ -466,6 +474,7 @@ begin
 					
 					
 			end case;			
+		end if;
 		end if;
 		end if;
 		end if;

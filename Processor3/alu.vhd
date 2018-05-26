@@ -82,8 +82,8 @@ begin
 			when "010011" => ------> Xnorcc
 				alu_r <= crs1 xor not mux_out;
 			
-			when others => 
-				alu_r <= "11111111111111111111111111111111";
+			when others => --nop
+				alu_r <= (others=>'0');
 				
 		end case;
 		

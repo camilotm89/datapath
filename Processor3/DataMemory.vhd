@@ -18,11 +18,15 @@ architecture Behavioral of DataMemory is
 begin
 	process(reset, out_ppal, CRD, WRMEM)
 		begin
-			if(WRMEM = '0')then
+		if (reset = '1')then
+			DATOMEM <= (others => '0');
+			ram <= (others => x"00000000");
+			
+			elsif(WRMEM = '0')then
 				DATOMEM <= ram(conv_integer(out_ppal(5 downto 0)));
 			else
 				ram(conv_integer(out_ppal(5 downto 0))) <= CRD;
-			end if;
+		end if;
 	end process;
 				
 
