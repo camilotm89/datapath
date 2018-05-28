@@ -409,6 +409,22 @@ begin
 					WE_rf <= '1';
 					rf_s <= "01";
 					rf_d <= '0';
+				
+				when "100101" =>
+					salida_aluop <= "010100";
+					pc_src <= "11";
+					WR_dm <= '0';
+					WE_rf <= '1';
+					rf_s <= "01";
+					rf_d <= '0';
+					
+				when "100110" =>
+					salida_aluop <= "010101";
+					pc_src <= "11";
+					WR_dm <= '0';
+					WE_rf <= '1';
+					rf_s <= "01";
+					rf_d <= '0';
 					
 				when "111100" => ------> Save
 					salida_aluop <= "000000"; -- Modifica CWP

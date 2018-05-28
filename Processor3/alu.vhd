@@ -1,8 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use ieee.std_logic_arith.all;
-use IEEE.NUMERIC_STD.ALL;
-use IEEE.STD_LOGIC_SIGNED.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 
 
@@ -81,6 +80,12 @@ begin
 				
 			when "010011" => ------> Xnorcc
 				alu_r <= crs1 xor not mux_out;
+				
+			when "010100" => ------> SLL
+				alu_r <= to_stdlogicvector(to_bitvector(crs1) sll conv_integer(mux_out));
+				
+			when "010101" => --------> SLR
+				alu_r <= to_stdlogicvector(to_bitvector(crs1) srl conv_integer(mux_out));
 			
 			when others => --nop
 				alu_r <= (others=>'0');
