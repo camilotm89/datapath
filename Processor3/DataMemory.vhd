@@ -14,20 +14,21 @@ architecture Behavioral of DataMemory is
 		
 		type ram_type is array (0 to 63) of STD_LOGIC_VECTOR (31 downto 0);
 		signal ram : ram_type := (others => x"00000000");
+		signal DATOMEM_s : std_logic_vector (31 downto 0) := x"00000000";
 
 begin
 	process(reset, out_ppal, CRD, WRMEM)
 		begin
 		if (reset = '1')then
-			DATOMEM <= (others => '0');
 			ram <= (others => x"00000000");
 			
 			elsif(WRMEM = '0')then
-				DATOMEM <= ram(conv_integer(out_ppal(5 downto 0)));
+				DATOMEM_s <= ram(conv_integer(out_ppal(5 downto 0)));
 			else
 				ram(conv_integer(out_ppal(5 downto 0))) <= CRD;
 		end if;
 	end process;
-				
+
+DATOMEM <= DATOMEM_s;
 
 end Behavioral;
