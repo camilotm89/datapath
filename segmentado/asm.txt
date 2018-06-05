@@ -1,0 +1,18 @@
+mov 1, %l0
+mov 1, %l1
+cmp %l1, %l3
+bge a, fin
+nop
+add %l0,%l2, %l4
+nop
+nop
+mov %l4,%l0
+add %l1,3, %l4
+nop 
+nop
+mov 8, %l1
+nop
+nop
+nop
+cmp %l1, %l3
+bl a, mult
